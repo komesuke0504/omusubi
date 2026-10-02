@@ -4,168 +4,530 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>こめすけのしょうかい</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&family=Dela+Gothic+One&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #fffaf2;
-      --card: #ffffff;
-      --text: #3a3a3a;
-      --muted: #7a7a7a;
-      --accent: #e8743b;
-      --accent-soft: #fde7d9;
-      --border: #f0e6da;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1e1c1a;
-        --card: #2a2724;
-        --text: #f2ede6;
-        --muted: #a9a29a;
-        --accent: #f59a6a;
-        --accent-soft: #3d2c22;
-        --border: #3a3531;
-      }
+      --bg: #0d0b1f;
+      --text: #f6f3ff;
+      --muted: #b4acd6;
+      --orange: #ff7a2f;
+      --pink: #ff4fa3;
+      --violet: #8b5cf6;
+      --cyan: #22d3ee;
+      --lime: #a3e635;
+      --glass: rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(255, 255, 255, 0.14);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+      font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+      font-weight: 500;
       line-height: 1.8;
+      overflow-x: hidden;
     }
 
-    header {
+    /* 背景でゆっくり動くカラフルな光 */
+    .blobs {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      filter: blur(80px);
+      opacity: 0.55;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      animation: float 18s ease-in-out infinite alternate;
+    }
+
+    .blob.b1 { width: 45vmax; height: 45vmax; background: var(--violet); top: -15vmax; left: -10vmax; }
+    .blob.b2 { width: 35vmax; height: 35vmax; background: var(--pink); top: 30vh; right: -12vmax; animation-delay: -6s; }
+    .blob.b3 { width: 30vmax; height: 30vmax; background: var(--orange); bottom: -12vmax; left: 20vw; animation-delay: -12s; }
+
+    @keyframes float {
+      to { transform: translate(6vmax, 4vmax) scale(1.15); }
+    }
+
+    /* ヒーロー */
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
       text-align: center;
-      padding: 4rem 1rem 3rem;
+      padding: 2rem 1rem;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
     }
 
     .avatar {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 1rem;
+      width: 160px;
+      height: 160px;
+      margin: 1.75rem auto 1.25rem;
       border-radius: 50%;
-      background: var(--accent-soft);
       display: grid;
       place-items: center;
-      font-size: 4rem;
+      font-size: 5rem;
+      background: conic-gradient(from 0deg, var(--orange), var(--pink), var(--violet), var(--cyan), var(--orange));
+      padding: 6px;
+      animation: spin 6s linear infinite;
+      cursor: pointer;
+      border: none;
+    }
+
+    .avatar span {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--bg);
+      display: grid;
+      place-items: center;
+      animation: spin 6s linear infinite reverse;
+      transition: transform 0.2s;
+    }
+
+    .avatar:hover span {
+      transform: scale(1.1) rotate(-8deg);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     h1 {
       margin: 0;
-      font-size: 2.25rem;
+      font-family: "Dela Gothic One", sans-serif;
+      font-weight: 400;
+      font-size: clamp(3.5rem, 14vw, 7.5rem);
+      line-height: 1.1;
+      background: linear-gradient(90deg, var(--orange), var(--pink), var(--violet), var(--cyan), var(--orange));
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shine 6s linear infinite;
+    }
+
+    @keyframes shine {
+      to { background-position: 300% 0; }
     }
 
     .tagline {
-      margin: 0.5rem 0 0;
+      margin: 1rem 0 0;
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
       color: var(--muted);
     }
 
-    main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 0 1rem 4rem;
-      display: grid;
-      gap: 1.5rem;
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 2rem;
     }
 
-    section {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem 1.75rem;
+    .chip {
+      padding: 0.6rem 1.25rem;
+      border-radius: 999px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .chip:hover {
+      transform: translateY(-3px);
+    }
+
+    .chip.ball { background: linear-gradient(135deg, var(--orange), var(--pink)); box-shadow: 0 8px 24px -8px var(--orange); }
+    .chip.dog { background: linear-gradient(135deg, var(--cyan), var(--violet)); box-shadow: 0 8px 24px -8px var(--cyan); }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      translate: -50% 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+      animation: bob 1.6s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+      50% { transform: translateY(8px); }
+    }
+
+    /* セクション */
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1.25rem 5rem;
+      display: grid;
+      gap: 2rem;
+    }
+
+    .card {
+      position: relative;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: clamp(1.5rem, 4vw, 2.75rem);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 4px;
+      background: var(--accent);
+    }
+
+    .card.hello { --accent: linear-gradient(90deg, var(--lime), var(--cyan)); }
+    .card.basket { --accent: linear-gradient(90deg, var(--orange), var(--pink)); }
+    .card.dog { --accent: linear-gradient(90deg, var(--cyan), var(--violet)); }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+      background: var(--accent);
+    }
+
+    .label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
     }
 
     h2 {
-      margin: 0 0 0.75rem;
-      font-size: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    h2 .icon {
-      font-size: 1.5rem;
+      margin: 0;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.3;
     }
 
     p {
       margin: 0;
+      font-size: 1.05rem;
     }
 
-    ul {
-      margin: 0.75rem 0 0;
-      padding-left: 1.25rem;
+    .split {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .split { grid-template-columns: 1fr; }
+    }
+
+    /* プレースタイルのカード */
+    .stats {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 1rem 1.25rem;
+    }
+
+    .stat-top {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-top em {
+      font-style: normal;
+      color: var(--orange);
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--orange), var(--pink));
+      transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .card.visible .bar i {
+      width: var(--w);
+    }
+
+    /* 跳ねるボール */
+    .court {
+      position: relative;
+      height: 240px;
+      display: grid;
+      place-items: end center;
+    }
+
+    .ball {
+      font-size: 5.5rem;
+      position: absolute;
+      top: 0;
+      animation: bounce 1.1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    }
+
+    .shadow {
+      width: 90px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      animation: squash 1.1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(120px) rotate(180deg); }
+    }
+
+    @keyframes squash {
+      0%, 100% { transform: scale(0.5); opacity: 0.3; }
+      50% { transform: scale(1); opacity: 0.7; }
+    }
+
+    /* 犬 */
+    .dog-stage {
+      position: relative;
+      height: 240px;
+      display: grid;
+      place-items: center;
+    }
+
+    .dog-emoji {
+      font-size: 6rem;
+      animation: wag 0.6s ease-in-out infinite alternate;
+      transform-origin: bottom center;
+    }
+
+    @keyframes wag {
+      from { transform: rotate(-6deg); }
+      to { transform: rotate(6deg); }
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 1.5rem;
+      animation: rise 3s ease-in infinite;
+      opacity: 0;
+    }
+
+    .heart:nth-child(2) { left: 30%; animation-delay: 0.8s; }
+    .heart:nth-child(3) { left: 60%; animation-delay: 1.6s; }
+    .heart:nth-child(4) { left: 45%; animation-delay: 2.4s; }
+
+    @keyframes rise {
+      0% { transform: translateY(80px) scale(0.6); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-90px) scale(1.2); opacity: 0; }
     }
 
     .tags {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
     }
 
     .tag {
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 0.85rem;
-      font-weight: bold;
-      padding: 0.25rem 0.75rem;
+      padding: 0.3rem 0.9rem;
       border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--glass-border);
+    }
+
+    /* スクロールでふわっと出る */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
     }
 
     footer {
       text-align: center;
       color: var(--muted);
       font-size: 0.85rem;
-      padding-bottom: 2rem;
+      padding-bottom: 3rem;
+    }
+
+    /* クリックで飛び出す紙吹雪 */
+    .confetti {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.5rem;
+      z-index: 10;
+      animation: pop 1.2s ease-out forwards;
+    }
+
+    @keyframes pop {
+      to { transform: translate(var(--dx), var(--dy)) rotate(var(--r)); opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      .bar i { width: var(--w); }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="avatar">🍙</div>
-    <h1>こめすけ</h1>
-    <p class="tagline">バスケと犬が好きです</p>
+  <div class="blobs" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <header class="hero">
+    <div>
+      <span class="badge">PROFILE</span>
+      <button class="avatar" id="avatar" aria-label="クリックしてみて！"><span>🍙</span></button>
+      <h1>こめすけ</h1>
+      <p class="tagline">バスケと犬が大好き！</p>
+      <nav class="chips">
+        <a class="chip ball" href="#basket">🏀 バスケ</a>
+        <a class="chip dog" href="#dog">🐕 うちの犬</a>
+      </nav>
+    </div>
+    <div class="scroll-hint">▼ スクロール</div>
   </header>
 
   <main>
-    <section>
-      <h2><span class="icon">👋</span>はじめまして</h2>
+    <section class="card hello reveal">
+      <div class="card-head">
+        <div class="card-icon">👋</div>
+        <div>
+          <div class="label">HELLO</div>
+          <h2>はじめまして！</h2>
+        </div>
+      </div>
       <p>
         こめすけです。休みの日はバスケをしたり、愛犬とのんびり過ごしたりしています。
         このページでは、ぼくの好きなことを紹介します。
       </p>
     </section>
 
-    <section>
-      <h2><span class="icon">🏀</span>バスケットボール</h2>
-      <p>
-        バスケをやっています。リバウンドをもぎ取った瞬間と、チームで声をかけ合ってプレーする時間が好きです。
-      </p>
-      <ul>
-        <li>プレースタイル：リバウンドを取る</li>
-        <li>目標：もっとうまくなること！</li>
-      </ul>
-      <div class="tags">
-        <span class="tag">#バスケ</span>
-        <span class="tag">#チームプレー</span>
+    <section class="card basket reveal" id="basket">
+      <div class="split">
+        <div>
+          <div class="card-head">
+            <div class="card-icon">🏀</div>
+            <div>
+              <div class="label">BASKETBALL</div>
+              <h2>バスケットボール</h2>
+            </div>
+          </div>
+          <p>
+            バスケをやっています。リバウンドをもぎ取った瞬間と、チームで声をかけ合ってプレーする時間が好きです。
+          </p>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-top"><span>プレースタイル</span><em>リバウンドを取る</em></div>
+              <div class="bar"><i style="--w: 95%"></i></div>
+            </div>
+            <div class="stat">
+              <div class="stat-top"><span>目標</span><em>もっとうまくなる！</em></div>
+              <div class="bar"><i style="--w: 70%"></i></div>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag">#バスケ</span>
+            <span class="tag">#リバウンド</span>
+            <span class="tag">#チームプレー</span>
+          </div>
+        </div>
+        <div class="court" aria-hidden="true">
+          <div class="ball">🏀</div>
+          <div class="shadow"></div>
+        </div>
       </div>
     </section>
 
-    <section>
-      <h2><span class="icon">🐕</span>うちの犬</h2>
-      <p>
-        犬を飼っています。家に帰るといつもしっぽを振って迎えてくれる、大切な家族です。
-        散歩の時間がいちばんの癒やしです。
-      </p>
-      <div class="tags">
-        <span class="tag">#いぬ</span>
-        <span class="tag">#さんぽ</span>
-        <span class="tag">#家族</span>
+    <section class="card dog reveal" id="dog">
+      <div class="split">
+        <div>
+          <div class="card-head">
+            <div class="card-icon">🐕</div>
+            <div>
+              <div class="label">MY DOG</div>
+              <h2>うちの犬</h2>
+            </div>
+          </div>
+          <p>
+            犬を飼っています。家に帰るといつもしっぽを振って迎えてくれる、大切な家族です。
+            散歩の時間がいちばんの癒やしです。
+          </p>
+          <div class="tags">
+            <span class="tag">#いぬ</span>
+            <span class="tag">#さんぽ</span>
+            <span class="tag">#家族</span>
+          </div>
+        </div>
+        <div class="dog-stage" aria-hidden="true">
+          <div class="dog-emoji">🐶</div>
+          <span class="heart">💖</span>
+          <span class="heart">💛</span>
+          <span class="heart">💜</span>
+        </div>
       </div>
     </section>
   </main>
@@ -173,5 +535,37 @@
   <footer>
     &copy; 2026 こめすけ
   </footer>
+
+  <script>
+    // スクロールで見えたカードをふわっと表示
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0.2 });
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+
+    // アイコンをクリックすると紙吹雪
+    const items = ["🏀", "🐾", "🍙", "⭐", "💖", "🎉"];
+    document.getElementById("avatar").addEventListener("click", (e) => {
+      for (let i = 0; i < 18; i++) {
+        const el = document.createElement("span");
+        el.className = "confetti";
+        el.textContent = items[i % items.length];
+        el.style.left = e.clientX + "px";
+        el.style.top = e.clientY + "px";
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 100 + Math.random() * 160;
+        el.style.setProperty("--dx", Math.cos(angle) * dist + "px");
+        el.style.setProperty("--dy", Math.sin(angle) * dist + "px");
+        el.style.setProperty("--r", Math.random() * 720 - 360 + "deg");
+        document.body.appendChild(el);
+        el.addEventListener("animationend", () => el.remove());
+      }
+    });
+  </script>
 </body>
 </html>
